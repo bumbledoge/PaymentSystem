@@ -37,7 +37,7 @@ namespace PayementSystem.Pages.Payments
             }
             Payment = payment;
 
-            ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "RecipentName");
+            ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "Name");
 
             return Page();
         }

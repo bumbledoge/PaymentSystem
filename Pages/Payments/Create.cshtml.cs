@@ -21,7 +21,7 @@ namespace PayementSystem.Pages.Payments
 
         public IActionResult OnGet()
         {
-            ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "RecipientName");
+            ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "Name");
             return Page();
         }
 

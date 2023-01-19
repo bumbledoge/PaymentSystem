@@ -23,8 +23,10 @@ namespace PayementSystem.Pages.Payments
 
         public async Task OnGetAsync()
         {
-            Payment = await _context.Payment.Include(b => b.Recipient).ToListAsync();
-            
+            if (_context.Payment!= null)
+            {
+                Payment = await _context.Payment.Include(b => b.Recipient).ToListAsync();
+            }
         }
     }
 }

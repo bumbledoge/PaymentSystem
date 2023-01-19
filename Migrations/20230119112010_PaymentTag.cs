@@ -82,13 +82,13 @@ namespace PayementSystem.Migrations
                 table: "PaymentTag",
                 column: "TagID");
 
-            /* migrationBuilder.AddForeignKey(
+            migrationBuilder.AddForeignKey(
                 name: "FK_Payment_Recipient_RecipientID",
                 table: "Payment",
                 column: "RecipientID",
                 principalTable: "Recipient",
                 principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade); */
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
