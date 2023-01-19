@@ -32,10 +32,6 @@ namespace PayementSystem.Pages.Payments
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
 
             _context.Payment.Add(Payment);
             await _context.SaveChangesAsync();
