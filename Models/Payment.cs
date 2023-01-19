@@ -15,7 +15,7 @@ namespace PayementSystem.Models
         public DateTime PaymentDate { get; set; }
 
         // legaturi
-        public int RecipientID { get; set; }
+        public int ?RecipientID { get; set; }
         public Recipient Recipient { get; set; }
         public ICollection<PaymentTag> PaymentTags { get; set; }
     }

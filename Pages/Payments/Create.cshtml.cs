@@ -21,7 +21,7 @@ namespace PayementSystem.Pages.Payments
 
         public IActionResult OnGet()
         {
-            ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "RecipentName");
+            ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "RecipientName");
             return Page();
         }
 
@@ -32,6 +32,10 @@ namespace PayementSystem.Pages.Payments
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             _context.Payment.Add(Payment);
             await _context.SaveChangesAsync();
