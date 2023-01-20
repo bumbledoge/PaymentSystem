@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
 
 namespace PayementSystem.Models
 {
@@ -10,5 +11,8 @@ namespace PayementSystem.Models
         
         //legaturi
         public ICollection<Payment> Payments { get; set; }
+
+        public int JobID { get; set; }
+        public Job Job { get; set; }
     }
 }

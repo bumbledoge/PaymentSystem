@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PayementSystem.Data;
 using PayementSystem.Models;
 
-namespace PayementSystem.Pages.Recipients
+namespace PayementSystem.Pages.Jobs
 {
     public class IndexModel : PageModel
     {
@@ -19,12 +19,14 @@ namespace PayementSystem.Pages.Recipients
             _context = context;
         }
 
-        public IList<Recipient> Recipient { get;set; } = default!;
+        public IList<Job> Job { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Recipient = await _context.Recipient.Include(b => b.Job).ToListAsync();
-            
+            if (_context.Job != null)
+            {
+                Job = await _context.Job.ToListAsync();
+            }
         }
     }
 }
