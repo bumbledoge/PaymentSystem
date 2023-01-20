@@ -1,8 +1,11 @@
-﻿namespace PayementSystem.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PayementSystem.Models
 {
     public class Recipient
     {
         public int ID { get; set; }
+        [Display(Name = "Name")]
         public string Name { get; set; }
         
         //legaturi
