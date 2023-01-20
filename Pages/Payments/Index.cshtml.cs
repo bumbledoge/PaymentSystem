@@ -38,9 +38,9 @@ namespace PayementSystem.Pages.Payments
             if (id != null)
             {
                 PaymentID = id.Value;
-                Payment book = PaymentD.Payments
+                Payment payment = PaymentD.Payments
                 .Where(i => i.ID == id.Value).Single();
-                PaymentD.Tags = book.PaymentTags.Select(s => s.Tag);
+                PaymentD.Tags = payment.PaymentTags.Select(s => s.Tag);
             }
         }
     }

@@ -49,7 +49,7 @@ namespace PayementSystem.Pages.Payments
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedCategories)
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedTags)
         {
             if (id == null)
             {
@@ -68,14 +68,14 @@ namespace PayementSystem.Pages.Payments
 
             await TryUpdateModelAsync<Payment>(paymentToUpdate, "Payment", i => i.Value, i => i.Description, i => i.PaymentDate, i => i.Recipient);
 
-            UpdatePaymentTags(_context, selectedCategories, paymentToUpdate);
+            UpdatePaymentTags(_context, selectedTags, paymentToUpdate);
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
 
 
             //Apelam UpdatePaymentTags pentru a aplica informatiile din checkboxuri la entitatea Payments care 
             //este editata 
-            UpdatePaymentTags(_context, selectedCategories, paymentToUpdate);
+            UpdatePaymentTags(_context, selectedTags, paymentToUpdate);
             PopulateAssignedTagData(_context, paymentToUpdate);
             return Page();
         }
