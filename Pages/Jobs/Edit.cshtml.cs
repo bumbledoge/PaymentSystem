@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using PayementSystem.Data;
 using PayementSystem.Models;
 
-namespace PayementSystem.Pages.Recipients
+namespace PayementSystem.Pages.Jobs
 {
     public class EditModel : PageModel
     {
@@ -21,23 +21,21 @@ namespace PayementSystem.Pages.Recipients
         }
 
         [BindProperty]
-        public Recipient Recipient { get; set; } = default!;
+        public Job Job { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Recipient == null)
+            if (id == null || _context.Job == null)
             {
                 return NotFound();
             }
 
-            var recipient =  await _context.Recipient.FirstOrDefaultAsync(m => m.ID == id);
-            if (recipient == null)
+            var job =  await _context.Job.FirstOrDefaultAsync(m => m.ID == id);
+            if (job == null)
             {
                 return NotFound();
             }
-            Recipient = recipient;
-            ViewData["JobID"] = new SelectList(_context.Set<Job>(), "ID", "Title");
-
+            Job = job;
             return Page();
         }
 
@@ -47,7 +45,7 @@ namespace PayementSystem.Pages.Recipients
         {
             
 
-            _context.Attach(Recipient).State = EntityState.Modified;
+            _context.Attach(Job).State = EntityState.Modified;
 
             try
             {
@@ -55,7 +53,7 @@ namespace PayementSystem.Pages.Recipients
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RecipientExists(Recipient.ID))
+                if (!JobExists(Job.ID))
                 {
                     return NotFound();
                 }
@@ -68,9 +66,9 @@ namespace PayementSystem.Pages.Recipients
             return RedirectToPage("./Index");
         }
 
-        private bool RecipientExists(int id)
+        private bool JobExists(int id)
         {
-          return _context.Recipient.Any(e => e.ID == id);
+          return _context.Job.Any(e => e.ID == id);
         }
     }
 }

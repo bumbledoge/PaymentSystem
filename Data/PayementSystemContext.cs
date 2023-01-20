@@ -19,5 +19,7 @@ namespace PayementSystem.Data
         public DbSet<PayementSystem.Models.Recipient> Recipient { get; set; }
 
         public DbSet<PayementSystem.Models.Tag> Tag { get; set; }
+
+        public DbSet<PayementSystem.Models.Job> Job { get; set; }
     }
 }

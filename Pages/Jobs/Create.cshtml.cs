@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using PayementSystem.Data;
 using PayementSystem.Models;
 
-namespace PayementSystem.Pages.Recipients
+namespace PayementSystem.Pages.Jobs
 {
     public class CreateModel : PageModel
     {
@@ -21,19 +21,18 @@ namespace PayementSystem.Pages.Recipients
 
         public IActionResult OnGet()
         {
-            ViewData["JobID"] = new SelectList(_context.Set<Job>(), "ID", "Title");
             return Page();
         }
 
         [BindProperty]
-        public Recipient Recipient { get; set; }
+        public Job Job { get; set; }
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
 
-            _context.Recipient.Add(Recipient);
+            _context.Job.Add(Job);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
