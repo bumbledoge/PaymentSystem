@@ -11,7 +11,7 @@ using PayementSystem.Models;
 
 namespace PayementSystem.Pages.Payments
 {
-    public class EditModel : PageModel
+    public class EditModel : PaymentTagsPageModel
     {
         private readonly PayementSystem.Data.PayementSystemContext _context;
 
@@ -30,33 +30,54 @@ namespace PayementSystem.Pages.Payments
                 return NotFound();
             }
 
+            Payment = await _context.Payment
+             .Include(b => b.Recipient)
+             .Include(b => b.PaymentTags).ThenInclude(b => b.Tag)
+             .AsNoTracking()
+             .FirstOrDefaultAsync(m => m.ID == id);
+
             var payment =  await _context.Payment.FirstOrDefaultAsync(m => m.ID == id);
             if (payment == null)
             {
                 return NotFound();
             }
-            Payment = payment;
+            PopulateAssignedTagData(_context, Payment);
 
             ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "Name");
 
+            Payment = payment;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedCategories)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var paymentToUpdate = await _context.Payment
+            .Include(i => i.Recipient)
+            .Include(i => i.PaymentTags)
+            .ThenInclude(i => i.Tag)
+            .FirstOrDefaultAsync(s => s.ID == id);
+            if (paymentToUpdate == null)
+            {
+                return NotFound();
+            }
 
-            _context.Attach(Payment).State = EntityState.Modified;
 
+            await TryUpdateModelAsync<Payment>(paymentToUpdate, "Payment", i => i.Value, i => i.Description, i => i.PaymentDate, i => i.Recipient);
+
+            UpdatePaymentTags(_context, selectedCategories, paymentToUpdate);
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
-        }
 
-        private bool PaymentExists(int id)
-        {
-          return _context.Payment.Any(e => e.ID == id);
+
+            //Apelam UpdatePaymentTags pentru a aplica informatiile din checkboxuri la entitatea Payments care 
+            //este editata 
+            UpdatePaymentTags(_context, selectedCategories, paymentToUpdate);
+            PopulateAssignedTagData(_context, paymentToUpdate);
+            return Page();
         }
     }
 }
