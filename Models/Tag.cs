@@ -8,6 +8,7 @@ namespace PayementSystem.Models
         public string TagName { get; set; }
 
         //legaturi
+        public ICollection<JobTag> JobTags { get; set; }
         public ICollection<PaymentTag>? PaymentTags { get; set; }
     }
 }

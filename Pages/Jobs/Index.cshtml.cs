@@ -21,11 +21,25 @@ namespace PayementSystem.Pages.Jobs
 
         public IList<Job> Job { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public JobData JobD { get; set; }
+        public int JobID { get; set; }
+        public int TagID { get; set; }
+        public async Task OnGetAsync(int? id, int? categoryID)
         {
-            if (_context.Job != null)
+            JobD = new JobData();
+
+            JobD.Jobs = await _context.Job
+                                                .Include(b => b.JobTags)
+                                                .ThenInclude(b => b.Tag)
+                                                .AsNoTracking()
+                                                .OrderBy(b => b.Title)
+                                                .ToListAsync();
+            if (id != null)
             {
-                Job = await _context.Job.ToListAsync();
+                JobID = id.Value;
+                Job job = JobD.Jobs
+                .Where(i => i.ID == id.Value).Single();
+                JobD.Tags = job.JobTags.Select(s => s.Tag);
             }
         }
     }

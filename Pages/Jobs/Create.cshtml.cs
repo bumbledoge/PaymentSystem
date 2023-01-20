@@ -10,7 +10,7 @@ using PayementSystem.Models;
 
 namespace PayementSystem.Pages.Jobs
 {
-    public class CreateModel : PageModel
+    public class CreateModel : JobTagPageModel
     {
         private readonly PayementSystem.Data.PayementSystemContext _context;
 
@@ -21,21 +21,40 @@ namespace PayementSystem.Pages.Jobs
 
         public IActionResult OnGet()
         {
+            var job = new Job();
+            job.JobTags = new List<JobTag>();
+            PopulateAssignedTagData(_context, job);
+
             return Page();
         }
 
         [BindProperty]
         public Job Job { get; set; }
-        
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] selectedTags)
         {
+            var newJob = new Job();
+            if (selectedTags != null)
+            {
+                newJob.JobTags = new List<JobTag>();
+                foreach (var cat in selectedTags)
+                {
+                    var catToAdd = new JobTag
+                    {
+                        TagID = int.Parse(cat)
+                    };
+                    newJob.JobTags.Add(catToAdd);
+                }
+            }
 
-            _context.Job.Add(Job);
+            await TryUpdateModelAsync<Job>(newJob, "Job", i => i.Title);
+            _context.Job.Add(newJob);
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
+
+            PopulateAssignedTagData(_context, newJob);
+            return Page();
         }
     }
 }
