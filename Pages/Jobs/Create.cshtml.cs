@@ -31,7 +31,6 @@ namespace PayementSystem.Pages.Jobs
         [BindProperty]
         public Job Job { get; set; }
 
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync(string[] selectedTags)
         {
