@@ -50,9 +50,8 @@ namespace PayementSystem.Pages.Payments
                     newPayment.PaymentTags.Add(catToAdd);
                 }
             }
-            //if (!(await TryUpdateModelAsync<Payment>(newPayment, "Payment",
-            //        i => i.Title, i => i.Author, i => i.Price, i => i.PublishingDate, i => i.PublisherID)))
-            await TryUpdateModelAsync<Payment>(newPayment, "Payment", i => i.Value, i => i.Description, i => i.PaymentDate, i => i.Recipient);
+
+            await TryUpdateModelAsync<Payment>(newPayment, "Payment", i => i.Value, i => i.Description, i => i.PaymentDate, i => i.RecipientID);
             _context.Payment.Add(newPayment);
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
