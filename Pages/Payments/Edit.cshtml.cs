@@ -56,10 +56,10 @@ namespace PayementSystem.Pages.Payments
                 return NotFound();
             }
             var paymentToUpdate = await _context.Payment
-            .Include(i => i.Recipient)
-            .Include(i => i.PaymentTags)
-            .ThenInclude(i => i.Tag)
-            .FirstOrDefaultAsync(s => s.ID == id);
+                .Include(i => i.Recipient)
+                .Include(i => i.PaymentTags)
+                .ThenInclude(i => i.Tag)
+                .FirstOrDefaultAsync(s => s.ID == id);
             if (paymentToUpdate == null)
             {
                 return NotFound();
