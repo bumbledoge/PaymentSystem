@@ -10,7 +10,7 @@ using PayementSystem.Models;
 
 namespace PayementSystem.Pages.Payments
 {
-    public class CreateModel : PageModel
+    public class CreateModel : PaymentTagsPageModel
     {
         private readonly PayementSystem.Data.PayementSystemContext _context;
 
@@ -22,21 +22,43 @@ namespace PayementSystem.Pages.Payments
         public IActionResult OnGet()
         {
             ViewData["RecipientID"] = new SelectList(_context.Set<Recipient>(), "ID", "Name");
+
+            var payment = new Payment();
+            payment.PaymentTags = new List<PaymentTag>();
+            PopulateAssignedTagData(_context, payment);
+
             return Page();
         }
 
         [BindProperty]
         public Payment Payment { get; set; }
-        
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] selectedTags)
         {
-
-            _context.Payment.Add(Payment);
+            var newPayment = new Payment();
+            if (selectedTags != null)
+            {
+                newPayment.PaymentTags = new List<PaymentTag>();
+                foreach (var cat in selectedTags)
+                {
+                    var catToAdd = new PaymentTag
+                    {
+                        TagID = int.Parse(cat)
+                    };
+                    newPayment.PaymentTags.Add(catToAdd);
+                }
+            }
+            //if (!(await TryUpdateModelAsync<Payment>(newPayment, "Payment",
+            //        i => i.Title, i => i.Author, i => i.Price, i => i.PublishingDate, i => i.PublisherID)))
+            await TryUpdateModelAsync<Payment>(newPayment, "Payment", i => i.Value, i => i.Description, i => i.PaymentDate, i => i.Recipient);
+            _context.Payment.Add(newPayment);
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
+
+            PopulateAssignedTagData(_context, newPayment);
+            return Page();
         }
     }
 }
