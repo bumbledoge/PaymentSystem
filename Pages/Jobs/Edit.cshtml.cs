@@ -11,7 +11,7 @@ using PayementSystem.Models;
 
 namespace PayementSystem.Pages.Jobs
 {
-    public class EditModel : PageModel
+    public class EditModel : JobTagPageModel
     {
         private readonly PayementSystem.Data.PayementSystemContext _context;
 
@@ -30,45 +30,53 @@ namespace PayementSystem.Pages.Jobs
                 return NotFound();
             }
 
+            Job = await _context.Job
+             .Include(b => b.JobTags).ThenInclude(b => b.Tag)
+             .AsNoTracking()
+             .FirstOrDefaultAsync(m => m.ID == id);
+
             var job =  await _context.Job.FirstOrDefaultAsync(m => m.ID == id);
             if (job == null)
             {
                 return NotFound();
             }
+
+            PopulateAssignedTagData(_context, Job);
+
             Job = job;
             return Page();
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id, string[] selectedTags)
         {
-            
-
-            _context.Attach(Job).State = EntityState.Modified;
-
-            try
+            if (id == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            var jobToUpdate = await _context.Job
+            .Include(i => i.JobTags)
+            .ThenInclude(i => i.Tag)
+            .FirstOrDefaultAsync(s => s.ID == id);
+            if (jobToUpdate == null)
             {
-                if (!JobExists(Job.ID))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
+
+            await TryUpdateModelAsync<Job>(jobToUpdate, "Job", i => i.Title);
+
+            UpdateJobTags(_context, selectedTags, jobToUpdate);
+            await _context.SaveChangesAsync();
             return RedirectToPage("./Index");
-        }
 
-        private bool JobExists(int id)
-        {
-          return _context.Job.Any(e => e.ID == id);
+
+            //Apelam UpdateJobTags pentru a aplica informatiile din checkboxuri la entitatea Jobs care 
+            //este editata 
+            UpdateJobTags(_context, selectedTags, jobToUpdate);
+            PopulateAssignedTagData(_context, jobToUpdate);
+            return Page();
         }
     }
 }

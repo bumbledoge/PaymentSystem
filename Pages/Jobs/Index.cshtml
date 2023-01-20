@@ -16,14 +16,31 @@
             <th>
                 @Html.DisplayNameFor(model => model.Job[0].Title)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Job[0].JobTags)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Job) {
-        <tr>
+        @foreach (var item in Model.JobD.Jobs)
+        {
+            string selectedRow = "";
+            if (item.ID == Model.JobID)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
             <td>
                     @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                    @{
+                        foreach (var tag in item.JobTags)
+                        {
+                            @tag.Tag.TagName <br />
+                        }
+                    }
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
