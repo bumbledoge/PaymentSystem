@@ -6,11 +6,12 @@ namespace PayementSystem.Models
     public class Payment
     {
         public int ID { get; set; }
-        [Display(Name = "Value(in $)")]
+        [Display(Name = "Value")]
         public int Value { get; set; }
 
         public string Description { get; set; }
 
+        [Display(Name = "Date")]
         [DataType(DataType.Date)]
         public DateTime PaymentDate { get; set; }
 

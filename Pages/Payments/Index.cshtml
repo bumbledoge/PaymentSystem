@@ -14,10 +14,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Payment[0].Value)
+                @Html.DisplayNameFor(model => model.Payment[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Payment[0].Description)
+                @Html.DisplayNameFor(model => model.Payment[0].Value)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Payment[0].PaymentDate)
@@ -40,10 +40,10 @@
             }
             <tr class="@selectedRow">
                 <td>
-                    @Html.DisplayFor(modelItem => item.Value)
+                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    $@Html.DisplayFor(modelItem => item.Value)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PaymentDate)
